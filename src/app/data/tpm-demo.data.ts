@@ -1,0 +1,163 @@
+import {Machine, MaintenanceReport} from '../models/tpm.models';
+
+export function createDemoMachines(ownerId: string): Machine[] {
+  const now = new Date().toISOString();
+  return [
+    {
+      id: 'PRENSA-01',
+      code: 'PRENSA-01',
+      name: 'Prensa Hidráulica 01',
+      area: 'Estampado Línea A',
+      status: 'operando',
+      temperature: 68,
+      pressure: 145,
+      vibration: 4.2,
+      maintenancePending: false,
+      ownerId,
+      createdAt: now,
+      updatedAt: now,
+    },
+    {
+      id: 'TORNO-02',
+      code: 'TORNO-02',
+      name: 'Torno CNC Mazak QT-250',
+      area: 'Mecanizado Precisión',
+      status: 'operando',
+      temperature: 62,
+      pressure: 132,
+      vibration: 2.8,
+      maintenancePending: false,
+      ownerId,
+      createdAt: now,
+      updatedAt: now,
+    },
+    {
+      id: 'FRESA-03',
+      code: 'FRESA-03',
+      name: 'Fresadora Vertical Haas VF-2',
+      area: 'Mecanizado Precisión',
+      status: 'mantenimiento',
+      temperature: 78,
+      pressure: 118,
+      vibration: 5.4,
+      maintenancePending: true,
+      ownerId,
+      createdAt: now,
+      updatedAt: now,
+    },
+    {
+      id: 'COMPRESOR-04',
+      code: 'COMPRESOR-04',
+      name: 'Compresor Tornillo Atlas 75HP',
+      area: 'Servicios Auxiliares',
+      status: 'detenido',
+      temperature: 89,
+      pressure: 84,
+      vibration: 7.6,
+      maintenancePending: true,
+      ownerId,
+      createdAt: now,
+      updatedAt: now,
+    },
+  ];
+}
+
+export function createDemoReports(ownerId: string): MaintenanceReport[] {
+  const today = new Date();
+  const fmt = (daysAgo: number): string => {
+    const d = new Date(today);
+    d.setDate(d.getDate() - daysAgo);
+    const y = d.getFullYear();
+    const m = String(d.getMonth() + 1).padStart(2, '0');
+    const day = String(d.getDate()).padStart(2, '0');
+    return `${y}-${m}-${day}`;
+  };
+  const now = today.toISOString();
+
+  return [
+    {
+      id: 'REP-DEMO-001',
+      folio: 'TPM-2026-0001',
+      machineId: 'PRENSA-01',
+      machineCode: 'PRENSA-01',
+      machineName: 'Prensa Hidráulica 01',
+      operator: 'Carlos Mendoza',
+      date: fmt(0),
+      shift: 'matutino',
+      status: 'operando',
+      temperature: 68,
+      pressure: 145,
+      vibration: 4.2,
+      completedTaskIds: ['oil', 'air_filter'],
+      totalTasks: 5,
+      observations: 'Nivel de aceite hidráulico estable. Filtro de aire sopleteado al inicio de turno.',
+      signature: 'Carlos Mendoza',
+      ownerId,
+      createdAt: now,
+      updatedAt: now,
+    },
+    {
+      id: 'REP-DEMO-002',
+      folio: 'TPM-2026-0002',
+      machineId: 'TORNO-02',
+      machineCode: 'TORNO-02',
+      machineName: 'Torno CNC Mazak QT-250',
+      operator: 'Laura Jiménez',
+      date: fmt(1),
+      shift: 'vespertino',
+      status: 'operando',
+      temperature: 62,
+      pressure: 132,
+      vibration: 2.8,
+      completedTaskIds: ['oil', 'air_filter', 'lubrication', 'pressure_check', 'visual_inspection'],
+      totalTasks: 5,
+      observations: 'Checklist completo sin anomalías. Guías lubricadas con ISO VG 68.',
+      signature: 'Laura Jiménez',
+      ownerId,
+      createdAt: now,
+      updatedAt: now,
+    },
+    {
+      id: 'REP-DEMO-003',
+      folio: 'TPM-2026-0003',
+      machineId: 'FRESA-03',
+      machineCode: 'FRESA-03',
+      machineName: 'Fresadora Vertical Haas VF-2',
+      operator: 'Miguel Ángel Torres',
+      date: fmt(1),
+      shift: 'matutino',
+      status: 'mantenimiento',
+      temperature: 78,
+      pressure: 118,
+      vibration: 5.4,
+      completedTaskIds: ['oil', 'lubrication', 'visual_inspection'],
+      totalTasks: 5,
+      observations: 'Ligero incremento de vibración en husillo principal. Programada revisión de rodamientos.',
+      signature: 'Miguel Ángel Torres',
+      ownerId,
+      createdAt: now,
+      updatedAt: now,
+    },
+    {
+      id: 'REP-DEMO-004',
+      folio: 'TPM-2026-0004',
+      machineId: 'COMPRESOR-04',
+      machineCode: 'COMPRESOR-04',
+      machineName: 'Compresor Tornillo Atlas 75HP',
+      operator: 'Sofía Ramírez',
+      date: fmt(2),
+      shift: 'nocturno',
+      status: 'detenido',
+      temperature: 89,
+      pressure: 84,
+      vibration: 7.6,
+      completedTaskIds: ['pressure_check', 'visual_inspection'],
+      totalTasks: 5,
+      observations: 'Paro preventivo por caída de presión en línea secundaria y temperatura elevada.',
+      signature: 'Sofía Ramírez',
+      ownerId,
+      createdAt: now,
+      updatedAt: now,
+    },
+  ];
+}

@@ -1,0 +1,110 @@
+<div class="min-h-screen flex flex-col bg-[#F4F5F7] text-slate-900">
+  <!-- Barra de navegación superior (3 zonas, optimizada para tablet horizontal y escritorio) -->
+  <header class="sticky top-0 z-40 border-b border-slate-300 bg-white">
+    <div class="mx-auto flex max-w-[1440px] items-center justify-between gap-8 px-4 sm:px-6 h-16">
+      <!-- Zona 1: Marca (1 línea) -->
+      <a
+        routerLink="/bitacora"
+        class="font-display text-lg sm:text-xl font-bold tracking-tight text-slate-900 whitespace-nowrap shrink-0"
+      >
+        TPM <span class="text-[#D1851B]">SmartAssist</span>
+      </a>
+
+      <!-- Zona 2: Enlaces de navegación (4 enlaces en una sola línea) -->
+      <nav aria-label="Navegación principal" class="hidden md:flex items-center gap-7">
+        @for (item of navItems; track item.path) {
+          <a
+            [routerLink]="item.path"
+            routerLinkActive="text-[#D1851B] border-[#D1851B]"
+            class="border-b-2 border-transparent py-5 text-sm font-semibold text-slate-600 transition-colors hover:text-slate-900 whitespace-nowrap shrink-0"
+          >
+            {{ item.label }}
+          </a>
+        }
+      </nav>
+
+      <!-- Zona 3: Acción principal de conexión / sesión -->
+      <div class="flex items-center gap-3 shrink-0">
+        @if (isCloudConnected()) {
+          <div class="hidden sm:flex items-center gap-2 text-xs text-slate-600">
+            <span class="truncate max-w-[160px] font-medium text-slate-800">
+              {{ user()?.displayName || user()?.email }}
+            </span>
+          </div>
+          <button
+            type="button"
+            (click)="disconnectFirebase()"
+            class="inline-flex min-h-[40px] items-center gap-1.5 rounded-xl border border-slate-300 bg-white px-3.5 py-2 text-xs font-semibold text-slate-800 transition-colors hover:bg-slate-100 whitespace-nowrap shrink-0 cursor-pointer"
+          >
+            <mat-icon class="!text-[17px] !w-[17px] !h-[17px]">logout</mat-icon>
+            <span>Cerrar sesión</span>
+          </button>
+        } @else {
+          <button
+            type="button"
+            (click)="connectFirebase()"
+            class="inline-flex min-h-[40px] items-center gap-1.5 rounded-xl bg-slate-900 px-4 py-2 text-xs font-semibold text-white transition-colors hover:bg-slate-800 whitespace-nowrap shrink-0 cursor-pointer"
+          >
+            <mat-icon class="!text-[17px] !w-[17px] !h-[17px] text-[#E3AA22]">cloud_sync</mat-icon>
+            <span>Conectar Firebase</span>
+          </button>
+        }
+
+        <button
+          type="button"
+          (click)="toggleMobileMenu()"
+          class="md:hidden inline-flex min-h-[40px] min-w-[40px] items-center justify-center rounded-xl border border-slate-300 bg-white text-slate-800 hover:bg-slate-100 cursor-pointer"
+          aria-label="Abrir menú de navegación"
+          [attr.aria-expanded]="mobileMenuOpen()"
+        >
+          <mat-icon>{{ mobileMenuOpen() ? 'close' : 'menu' }}</mat-icon>
+        </button>
+      </div>
+    </div>
+
+    <!-- Menú desplegable en pantallas pequeñas -->
+    @if (mobileMenuOpen()) {
+      <nav
+        aria-label="Navegación móvil"
+        class="md:hidden border-t border-slate-200 bg-white px-4 py-3 space-y-1"
+      >
+        @for (item of navItems; track item.path) {
+          <a
+            [routerLink]="item.path"
+            (click)="closeMobileMenu()"
+            routerLinkActive="bg-amber-50 text-[#D1851B] border-[#D1851B]"
+            class="block rounded-xl border border-transparent px-3.5 py-2.5 text-sm font-semibold text-slate-700 hover:bg-slate-50"
+          >
+            {{ item.label }}
+          </a>
+        }
+      </nav>
+    }
+  </header>
+
+  @if (errorMessage(); as err) {
+    <div class="mx-auto w-full max-w-[1360px] px-4 sm:px-6 pt-4">
+      <div
+        class="flex items-center justify-between gap-3 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-900"
+        role="alert"
+      >
+        <div class="flex items-center gap-2">
+          <mat-icon class="text-red-600">warning</mat-icon>
+          <span>{{ err }}</span>
+        </div>
+        <button
+          type="button"
+          (click)="dismissError()"
+          class="rounded-lg p-1 text-red-700 hover:bg-red-100 cursor-pointer"
+          aria-label="Cerrar error"
+        >
+          <mat-icon class="!text-[18px] !w-[18px] !h-[18px]">close</mat-icon>
+        </button>
+      </div>
+    </div>
+  }
+
+  <main class="flex-1 px-4 py-5 sm:px-6 sm:py-6">
+    <router-outlet />
+  </main>
+</div>

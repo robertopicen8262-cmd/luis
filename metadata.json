@@ -1,0 +1,6 @@
+{
+  "name": "TPM SmartAssist",
+  "description": "Sistema industrial de gestión de mantenimiento autónomo (TPM) con bitácora operativa, indicadores de condición, inventario de maquinaria, historial de reportes y dashboard.",
+  "requestFramePermissions": [],
+  "majorCapabilities": []
+}
